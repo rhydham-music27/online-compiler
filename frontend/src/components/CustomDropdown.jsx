@@ -18,28 +18,24 @@ const CustomDropdown = ({ options, value, onChange }) => {
 
   return (
     <div className="custom-dropdown" ref={dropdownRef} style={{ position: 'relative', zIndex: isOpen ? 2000 : 100 }}>
-      <button 
-        className="dropdown-trigger" 
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        <span>{value.name}</span>
-        <ChevronDown 
-          size={12} 
-          className={`arrow ${isOpen ? 'open' : ''}`} 
-        />
+      <button className="dropdown-trigger" onClick={() => setIsOpen(!isOpen)}>
+        <span style={{ fontFamily: 'var(--font-code)', fontSize: '12px', color: 'var(--color-ink)' }}>
+          {value.name}
+        </span>
+        <ChevronDown size={12} className={`arrow ${isOpen ? 'open' : ''}`} />
       </button>
 
       <AnimatePresence>
         {isOpen && (
-          <motion.ul 
-            initial={{ opacity: 0, y: 8, scale: 0.95 }}
+          <motion.ul
+            initial={{ opacity: 0, y: 6, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 8, scale: 0.95 }}
-            transition={{ duration: 0.15, ease: 'easeOut' }}
+            exit={{ opacity: 0, y: 6, scale: 0.97 }}
+            transition={{ duration: 0.12, ease: 'easeOut' }}
             className="dropdown-menu"
           >
             {options.map((option) => (
-              <li 
+              <li
                 key={option.id}
                 className={`dropdown-item ${option.id === value.id ? 'active' : ''}`}
                 onClick={() => {
@@ -47,8 +43,8 @@ const CustomDropdown = ({ options, value, onChange }) => {
                   setIsOpen(false);
                 }}
               >
-                <span>{option.name}</span>
-                {option.id === value.id && <Check size={12} color="var(--brand-primary)" />}
+                <span style={{ fontFamily: 'var(--font-code)', fontSize: '12px' }}>{option.name}</span>
+                {option.id === value.id && <Check size={12} color="var(--color-primary)" />}
               </li>
             ))}
           </motion.ul>

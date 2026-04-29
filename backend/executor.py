@@ -24,11 +24,14 @@ class CodeExecutor:
             file_ext = {
                 "python": "py",
                 "cpp": "cpp",
-                "java": "java",
                 "javascript": "js"
             }.get(language, "txt")
-            
-            file_path = os.path.join(tmpdir, f"main.{file_ext}")
+
+            # Java: filename MUST match the public class name (case-sensitive)
+            if language == "java":
+                file_path = os.path.join(tmpdir, "Main.java")
+            else:
+                file_path = os.path.join(tmpdir, f"main.{file_ext}")
             with open(file_path, "w", encoding="utf-8") as f:
                 f.write(code)
 

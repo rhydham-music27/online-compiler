@@ -1,13 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Send, Sparkles, Wand2, Terminal, Info, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { X, Send, Sparkles, Wand2, Terminal, CheckCircle2 } from 'lucide-react';
 import axios from 'axios';
 
 const AIChatPanel = ({ isOpen, onClose, currentCode, language, lastOutput, lastError }) => {
   const [messages, setMessages] = useState([
-    { 
-      role: 'assistant', 
-      content: "Hello! I'm your Pro Compiler AI. I can help you debug, optimize, or explain your code. How can I assist you today?",
+    {
+      role: 'assistant',
+      content: "Hello! I'm your code AI. I can help you debug, optimize, or explain your code. How can I assist?",
       type: 'text'
     }
   ]);
@@ -35,57 +35,38 @@ const AIChatPanel = ({ isOpen, onClose, currentCode, language, lastOutput, lastE
       const response = await axios.post('http://127.0.0.1:8000/ai/chat', {
         message: text,
         code: currentCode,
-        language: language,
+        language,
         output: lastOutput,
-        error: lastError
+        error: lastError,
       });
-
-      setMessages([...newMessages, { 
-        role: 'assistant', 
+      setMessages([...newMessages, {
+        role: 'assistant',
         content: response.data.reply,
-        type: response.data.type || 'text'
+        type: response.data.type || 'text',
       }]);
-    } catch (err) {
-      setMessages([...newMessages, { 
-        role: 'assistant', 
+    } catch {
+      setMessages([...newMessages, {
+        role: 'assistant',
         content: "I'm having trouble connecting to the AI engine. Please ensure the backend is running.",
-        type: 'error'
+        type: 'error',
       }]);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const QuickAction = ({ icon: Icon, label, onClick }) => (
-    <motion.button
-      whileHover={{ scale: 1.02, background: 'rgba(94, 106, 210, 0.15)' }}
-      whileTap={{ scale: 0.98 }}
-      onClick={onClick}
-      className="quick-action-btn"
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '8px',
-        padding: '8px 12px',
-        borderRadius: '8px',
-        background: 'rgba(255,255,255,0.03)',
-        border: '1px solid rgba(255,255,255,0.08)',
-        color: 'var(--text-muted)',
-        fontSize: '11px',
-        fontWeight: 600,
-        cursor: 'pointer',
-        whiteSpace: 'nowrap'
-      }}
-    >
-      <Icon size={12} color="var(--brand-primary)" />
-      {label}
-    </motion.button>
-  );
+  // Cursor AI timeline stages shown as pills in the AI panel
+  const aiStages = [
+    { label: 'Thinking', cls: 'pill-thinking' },
+    { label: 'Reading', cls: 'pill-read' },
+    { label: 'Editing', cls: 'pill-edit' },
+  ];
 
   return (
     <AnimatePresence>
       {isOpen && (
         <>
+          {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -94,123 +75,162 @@ const AIChatPanel = ({ isOpen, onClose, currentCode, language, lastOutput, lastE
             className="ai-overlay"
             style={{
               position: 'fixed',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              background: 'rgba(0,0,0,0.4)',
-              backdropFilter: 'blur(4px)',
-              zIndex: 1000
+              inset: 0,
+              zIndex: 1000,
             }}
           />
+
+          {/* Panel */}
           <motion.div
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
-            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            transition={{ type: 'spring', damping: 28, stiffness: 240 }}
             className="ai-chat-container"
             style={{
               position: 'fixed',
               top: 0,
               right: 0,
-              width: '450px',
+              width: '440px',
               height: '100%',
-              background: 'rgba(13, 14, 15, 0.95)',
-              backdropFilter: 'blur(40px)',
-              borderLeft: '1px solid rgba(255,255,255,0.1)',
-              boxShadow: '-20px 0 50px rgba(0,0,0,0.5)',
+              background: 'var(--color-surface-card)',
+              borderLeft: '1px solid var(--color-hairline)',
               zIndex: 1001,
               display: 'flex',
-              flexDirection: 'column'
+              flexDirection: 'column',
             }}
           >
-            {/* Header */}
+            {/* ── Header ── */}
             <div style={{
-              padding: '24px',
-              borderBottom: '1px solid rgba(255,255,255,0.08)',
+              padding: '20px 24px',
+              borderBottom: '1px solid var(--color-hairline)',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'space-between'
+              justifyContent: 'space-between',
+              background: 'var(--color-canvas-soft)',
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <div style={{
-                  background: 'var(--brand-primary)',
-                  padding: '8px',
-                  borderRadius: '10px',
-                  boxShadow: '0 0 20px rgba(94, 106, 210, 0.4)'
+                  width: '36px',
+                  height: '36px',
+                  background: 'var(--color-primary)',
+                  borderRadius: 'var(--radius-md)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
                 }}>
-                  <Sparkles size={18} color="white" />
+                  <Sparkles size={16} color="white" />
                 </div>
                 <div>
-                  <h2 style={{ fontSize: '16px', color: 'white', fontWeight: 800 }}>AI Assistant</h2>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981' }} />
-                    <span style={{ fontSize: '10px', color: '#10b981', fontWeight: 700, letterSpacing: '0.05em' }}>ONLINE</span>
+                  <h2 style={{
+                    fontFamily: 'var(--font-display)',
+                    fontSize: '15px',
+                    fontWeight: 600,
+                    color: 'var(--color-ink)',
+                    letterSpacing: '-0.15px',
+                  }}>
+                    AI Assistant
+                  </h2>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
+                    <span className="status-dot success" />
+                    <span style={{
+                      fontFamily: 'var(--font-display)',
+                      fontSize: '11px',
+                      fontWeight: 600,
+                      letterSpacing: '0.5px',
+                      textTransform: 'uppercase',
+                      color: 'var(--color-success)',
+                    }}>
+                      Online
+                    </span>
                   </div>
                 </div>
               </div>
-              <button onClick={onClose} style={{ 
-                background: 'rgba(255,255,255,0.05)', 
-                border: 'none', 
-                padding: '8px', 
-                borderRadius: '50%', 
-                color: 'var(--text-muted)',
-                cursor: 'pointer'
-              }}>
-                <X size={18} />
+
+              <button
+                onClick={onClose}
+                className="btn-ghost"
+                style={{ padding: '8px', borderRadius: 'var(--radius-sm)' }}
+              >
+                <X size={16} />
               </button>
             </div>
 
-            {/* Chat Content */}
-            <div 
+            {/* ── AI Timeline Pills (signature) ── */}
+            <div style={{
+              padding: '12px 24px',
+              borderBottom: '1px solid var(--color-hairline-soft)',
+              display: 'flex',
+              gap: '6px',
+              flexWrap: 'wrap',
+            }}>
+              {aiStages.map(s => (
+                <span key={s.label} className={`timeline-pill ${s.cls}`}>
+                  {s.label}
+                </span>
+              ))}
+            </div>
+
+            {/* ── Messages ── */}
+            <div
               ref={scrollRef}
               style={{
                 flex: 1,
                 overflowY: 'auto',
-                padding: '24px',
+                padding: '20px 24px',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '20px',
-                scrollBehavior: 'smooth'
+                gap: '16px',
+                scrollBehavior: 'smooth',
               }}
             >
               {messages.map((msg, idx) => (
                 <motion.div
                   key={idx}
-                  initial={{ opacity: 0, y: 10 }}
+                  initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   style={{
                     alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start',
-                    maxWidth: '85%',
+                    maxWidth: '88%',
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '6px'
+                    gap: '4px',
                   }}
                 >
                   <div style={{
-                    padding: '12px 16px',
-                    borderRadius: msg.role === 'user' ? '16px 16px 0 16px' : '0 16px 16px 16px',
-                    background: msg.role === 'user' ? 'var(--brand-primary)' : 'rgba(255,255,255,0.05)',
-                    border: msg.role === 'user' ? 'none' : '1px solid rgba(255,255,255,0.08)',
-                    color: 'white',
+                    padding: '10px 14px',
+                    borderRadius: msg.role === 'user'
+                      ? 'var(--radius-lg) var(--radius-lg) var(--radius-xs) var(--radius-lg)'
+                      : 'var(--radius-lg) var(--radius-lg) var(--radius-lg) var(--radius-xs)',
+                    background: msg.role === 'user'
+                      ? 'var(--color-primary)'
+                      : 'var(--color-canvas-soft)',
+                    border: msg.role === 'user'
+                      ? 'none'
+                      : '1px solid var(--color-hairline)',
+                    color: msg.role === 'user' ? 'var(--color-on-primary)' : 'var(--color-ink)',
+                    fontFamily: 'var(--font-display)',
                     fontSize: '13px',
                     lineHeight: '1.6',
-                    whiteSpace: 'pre-wrap'
+                    whiteSpace: 'pre-wrap',
                   }}>
                     {msg.content}
                   </div>
-                  <span style={{ 
-                    fontSize: '10px', 
-                    color: 'var(--text-muted)', 
+                  <span style={{
+                    fontFamily: 'var(--font-display)',
+                    fontSize: '11px',
+                    color: 'var(--color-muted)',
                     alignSelf: msg.role === 'user' ? 'flex-end' : 'flex-start',
-                    fontWeight: 600
+                    fontWeight: 500,
                   }}>
                     {msg.role === 'user' ? 'You' : 'Assistant'}
                   </span>
                 </motion.div>
               ))}
+
               {isLoading && (
-                <div style={{ alignSelf: 'flex-start', display: 'flex', gap: '8px', padding: '12px' }}>
+                <div style={{ alignSelf: 'flex-start', display: 'flex', gap: '6px', padding: '10px 14px', background: 'var(--color-canvas-soft)', border: '1px solid var(--color-hairline)', borderRadius: 'var(--radius-lg)', width: 'fit-content' }}>
                   <div className="typing-dot" style={{ animationDelay: '0s' }} />
                   <div className="typing-dot" style={{ animationDelay: '0.2s' }} />
                   <div className="typing-dot" style={{ animationDelay: '0.4s' }} />
@@ -218,26 +238,37 @@ const AIChatPanel = ({ isOpen, onClose, currentCode, language, lastOutput, lastE
               )}
             </div>
 
-            {/* Footer / Input */}
+            {/* ── Footer / Input ── */}
             <div style={{
-              padding: '24px',
-              borderTop: '1px solid rgba(255,255,255,0.08)',
-              background: 'rgba(255,255,255,0.02)',
+              padding: '16px 24px',
+              borderTop: '1px solid var(--color-hairline)',
+              background: 'var(--color-canvas-soft)',
               display: 'flex',
               flexDirection: 'column',
-              gap: '16px'
+              gap: '12px',
             }}>
-              <div style={{ display: 'flex', gap: '8px', overflowX: 'auto', paddingBottom: '4px' }} className="no-scrollbar">
-                <QuickAction icon={Wand2} label="Fix Errors" onClick={() => handleSend("Can you find and fix the errors in my code?")} />
-                <QuickAction icon={Terminal} label="Explain Code" onClick={() => handleSend("Explain how this code works step by step.")} />
-                <QuickAction icon={CheckCircle2} label="Optimize" onClick={() => handleSend("Optimize this code for better time and space complexity.")} />
+              {/* Quick actions */}
+              <div style={{ display: 'flex', gap: '6px', overflowX: 'auto', paddingBottom: '2px' }} className="no-scrollbar">
+                <button className="quick-action-btn" onClick={() => handleSend("Can you find and fix the errors in my code?")}>
+                  <Wand2 size={12} color="var(--color-primary)" />
+                  Fix Errors
+                </button>
+                <button className="quick-action-btn" onClick={() => handleSend("Explain how this code works step by step.")}>
+                  <Terminal size={12} color="var(--color-primary)" />
+                  Explain
+                </button>
+                <button className="quick-action-btn" onClick={() => handleSend("Optimize this code for better time and space complexity.")}>
+                  <CheckCircle2 size={12} color="var(--color-primary)" />
+                  Optimize
+                </button>
               </div>
-              
+
+              {/* Textarea */}
               <div style={{ position: 'relative' }}>
                 <textarea
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="Ask me anything about your code..."
+                  placeholder="Ask me anything about your code…"
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' && !e.shiftKey) {
                       e.preventDefault();
@@ -246,37 +277,43 @@ const AIChatPanel = ({ isOpen, onClose, currentCode, language, lastOutput, lastE
                   }}
                   style={{
                     width: '100%',
-                    height: '100px',
-                    background: 'rgba(0,0,0,0.3)',
-                    border: '1px solid rgba(255,255,255,0.1)',
-                    borderRadius: '12px',
+                    height: '88px',
+                    background: 'var(--color-surface-card)',
+                    border: '1px solid var(--color-hairline)',
+                    borderRadius: 'var(--radius-md)',
                     padding: '12px',
-                    paddingRight: '50px',
-                    color: 'white',
+                    paddingRight: '48px',
+                    color: 'var(--color-ink)',
+                    fontFamily: 'var(--font-display)',
                     fontSize: '13px',
+                    lineHeight: '1.5',
                     resize: 'none',
                     outline: 'none',
-                    transition: 'border-color 0.2s ease'
+                    transition: 'border-color 0.15s',
                   }}
+                  onFocus={(e) => e.target.style.borderColor = 'var(--color-hairline-strong)'}
+                  onBlur={(e) => e.target.style.borderColor = 'var(--color-hairline)'}
                 />
                 <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={() => handleSend()}
                   style={{
                     position: 'absolute',
-                    right: '12px',
-                    bottom: '12px',
-                    background: 'var(--brand-primary)',
+                    right: '10px',
+                    bottom: '10px',
+                    background: 'var(--color-primary)',
                     border: 'none',
                     padding: '8px',
-                    borderRadius: '8px',
-                    color: 'white',
+                    borderRadius: 'var(--radius-sm)',
+                    color: 'var(--color-on-primary)',
                     cursor: 'pointer',
-                    boxShadow: '0 4px 12px rgba(94, 106, 210, 0.3)'
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
-                  <Send size={16} />
+                  <Send size={14} />
                 </motion.button>
               </div>
             </div>

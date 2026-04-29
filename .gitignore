@@ -1,33 +1,169 @@
-# Node.js
+# ============================================================
+# Online Compiler — Monorepo .gitignore
+# Stack: React + Vite (frontend) | FastAPI + Python (backend)
+# ============================================================
+
+
+# ─────────────────────────────────────────
+# Node / npm (Frontend)
+# ─────────────────────────────────────────
 node_modules/
+frontend/node_modules/
+
+# Vite build output
 dist/
 dist-ssr/
+frontend/dist/
+frontend/dist-ssr/
+
+# Vite local config overrides
 *.local
+
+# npm / yarn / pnpm debug logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Lock files (keep package-lock.json; ignore others if not used)
+# yarn.lock
+# pnpm-lock.yaml
+
+# ESLint cache
 .eslintcache
 
-# Python
+# Vite cache
+.vite/
+
+
+# ─────────────────────────────────────────
+# Python / FastAPI (Backend)
+# ─────────────────────────────────────────
+
+# Byte-compiled / optimised / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
-.env
-.venv
-env/
-venv/
-ENV/
-.pytest_cache/
-*.db
-*.sqlite3
+*.pyo
+*.pyd
 
-# IDEs
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+.env.bak
+
+# Distribution / packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Unit test / coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+*.py,cover
+nosetests.xml
+
+# mypy / pyright type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyright/
+
+# Ruff / Black cache
+.ruff_cache/
+
+# Jupyter Notebooks
+.ipynb_checkpoints
+
+
+# ─────────────────────────────────────────
+# Environment & Secrets  ← NEVER commit these
+# ─────────────────────────────────────────
+.env
+.env.*
+!.env.example
+backend/.env
+frontend/.env
+*.pem
+*.key
+*.cert
+
+
+# ─────────────────────────────────────────
+# Database / Storage
+# ─────────────────────────────────────────
+*.db
+*.sqlite
+*.sqlite3
+backend/tmp/
+uploads/
+
+
+# ─────────────────────────────────────────
+# IDEs & Editors
+# ─────────────────────────────────────────
 .vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
 .idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 *.swp
 *.swo
+*.bak
+*~
 
-# OS
+
+# ─────────────────────────────────────────
+# OS-generated
+# ─────────────────────────────────────────
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
+desktop.ini
 
-# Build Artifacts
-backend/tmp/
-frontend/build/
+
+# ─────────────────────────────────────────
+# Misc
+# ─────────────────────────────────────────
+*.zip
+*.tar.gz
+*.tgz
+.cache/
+tmp/
+temp/

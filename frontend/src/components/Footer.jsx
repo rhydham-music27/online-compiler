@@ -1,22 +1,52 @@
 import React from 'react';
-import { Cpu, ShieldCheck, Layout } from 'lucide-react';
+import { Cpu, ShieldCheck } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer className="footer" style={{ display: 'flex', alignItems: 'center', height: '32px', background: 'rgba(8,9,10,0.5)', padding: '0 24px' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '24px' }}>
+    <footer className="footer">
+      <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <Cpu size={11} color="var(--text-dim)" />
-          <span style={{ fontSize: '10px', color: 'var(--text-dim)', fontWeight: '500' }}>Cloud-Compute Active</span>
+          <Cpu size={11} color="var(--color-muted)" />
+          <span style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: '11px',
+            color: 'var(--color-muted)',
+            fontWeight: 400,
+          }}>
+            Cloud Compute Active
+          </span>
         </div>
+        <div style={{ width: '1px', height: '12px', background: 'var(--color-hairline)' }} />
         <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          <ShieldCheck size={11} color="var(--text-dim)" />
-          <span style={{ fontSize: '10px', color: 'var(--text-dim)', fontWeight: '500' }}>Sandbox V2</span>
+          <ShieldCheck size={11} color="var(--color-muted)" />
+          <span style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: '11px',
+            color: 'var(--color-muted)',
+            fontWeight: 400,
+          }}>
+            Sandbox v2
+          </span>
         </div>
       </div>
-      <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '20px' }}>
-        <span style={{ fontSize: '10px', color: 'var(--brand-primary)', fontWeight: '700', letterSpacing: '0.1em' }}>PRECISION STACK</span>
-        <span style={{ fontSize: '10px', color: 'var(--text-dim)' }}>UTF-8 Ready</span>
+
+      <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '16px' }}>
+        <span style={{
+          fontFamily: 'var(--font-display)',
+          fontSize: '11px',
+          fontWeight: 600,
+          color: 'var(--color-primary)',
+          letterSpacing: '0.5px',
+        }}>
+          ProCompiler
+        </span>
+        <span style={{
+          fontFamily: 'var(--font-code)',
+          fontSize: '11px',
+          color: 'var(--color-muted)',
+        }}>
+          UTF-8
+        </span>
       </div>
     </footer>
   );

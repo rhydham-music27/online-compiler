@@ -1,85 +1,114 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Sparkles, Loader2, Play, Eye } from 'lucide-react';
+import { Loader2, Play, Eye, Sparkles } from 'lucide-react';
 import CustomDropdown from './CustomDropdown';
 
 const Header = ({ languages, selectedLanguage, onLanguageChange, onExecute, loading, isWeb, onOpenAI }) => {
   return (
-    <header className="header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative' }}>
+    <header className="header">
+      {/* Left: Wordmark */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{ 
-            background: 'var(--grad-primary)', 
-            padding: '6px', 
-            borderRadius: '6px',
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          {/* Cursor orange wordmark dot */}
+          <div style={{
+            width: '22px',
+            height: '22px',
+            background: 'var(--color-primary)',
+            borderRadius: 'var(--radius-sm)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: '0 4px 15px rgba(94, 106, 210, 0.3)'
+            flexShrink: 0,
           }}>
-            <Sparkles size={14} color="white" />
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+              <path d="M2 10L6 2L10 10" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M3.5 7.5h5" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
+            </svg>
           </div>
-          <h1 style={{ color: 'var(--text-main)', fontSize: '15px', fontWeight: 800, letterSpacing: '-0.02em' }}>Pro Compiler</h1>
+          <span style={{
+            fontFamily: 'var(--font-display)',
+            fontSize: '15px',
+            fontWeight: 600,
+            letterSpacing: '-0.3px',
+            color: 'var(--color-ink)',
+          }}>
+            Pro<span style={{ color: 'var(--color-primary)' }}>Compiler</span>
+          </span>
         </div>
-        <div style={{ 
-          height: '14px', 
-          width: '1px', 
-          background: 'var(--border-subtle)',
-          margin: '0 8px' 
-        }} />
-        <span style={{ fontSize: '12px', color: 'var(--text-muted)', fontWeight: '450' }}>V2.5 Engine</span>
+
+        <div style={{ width: '1px', height: '16px', background: 'var(--color-hairline)' }} />
+
+        <span style={{
+          fontFamily: 'var(--font-display)',
+          fontSize: '12px',
+          fontWeight: 400,
+          color: 'var(--color-muted)',
+        }}>
+          v2.5 Engine
+        </span>
       </div>
 
-      {/* CENTRE: AI Command Center */}
-      <div style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', display: 'flex', alignItems: 'center' }}>
-        <motion.button 
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          onClick={() => onOpenAI()}
-          className="ai-summon-btn"
-          style={{ 
-            padding: '8px 24px', 
-            borderRadius: '100px', 
+      {/* Centre: AI Button */}
+      <div style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.97 }}
+          onClick={onOpenAI}
+          style={{
             display: 'flex',
             alignItems: 'center',
-            gap: '10px',
+            gap: '8px',
+            padding: '8px 18px',
+            borderRadius: 'var(--radius-md)',
+            background: 'var(--color-surface-card)',
+            border: '1px solid var(--color-hairline-strong)',
+            color: 'var(--color-ink)',
+            fontFamily: 'var(--font-display)',
+            fontSize: '13px',
+            fontWeight: 500,
             cursor: 'pointer',
-            fontWeight: 800
+            height: '36px',
           }}
         >
-          <Sparkles size={14} className="glow-icon" />
-          <span style={{ fontSize: '12px', letterSpacing: '0.05em' }}>ASK AI</span>
+          <Sparkles size={13} color="var(--color-primary)" />
+          <span>Ask AI</span>
         </motion.button>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-        <CustomDropdown 
+      {/* Right: Language + Run */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        <CustomDropdown
           options={languages}
           value={selectedLanguage}
           onChange={onLanguageChange}
         />
 
-        <motion.button 
+        <motion.button
           whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          onClick={onExecute} 
-          disabled={loading} 
-          className="btn-premium"
-          style={{ display: 'flex', alignItems: 'center', gap: '8px' }}
+          whileTap={{ scale: 0.97 }}
+          onClick={onExecute}
+          disabled={loading}
+          className="btn-primary"
+          style={{ gap: '8px' }}
         >
-          {loading ? <Loader2 size={14} className="animate-spin" /> : isWeb ? <Eye size={14} /> : <Play size={14} fill="currentColor" />}
-          {isWeb ? 'Preview' : (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-              <span>Run</span>
-              <span style={{ 
-                fontSize: '9px', 
-                opacity: 0.6, 
-                padding: '2px 4px', 
-                background: 'rgba(0,0,0,0.2)', 
-                borderRadius: '3px',
-                border: '1px solid rgba(255,255,255,0.1)'
-              }}>^↵</span>
-            </div>
+          {loading
+            ? <Loader2 size={13} className="animate-spin" />
+            : isWeb
+              ? <Eye size={13} />
+              : <Play size={13} fill="currentColor" />
+          }
+          <span>{isWeb ? 'Preview' : 'Run'}</span>
+          {!isWeb && (
+            <span style={{
+              fontSize: '10px',
+              opacity: 0.7,
+              fontFamily: 'var(--font-code)',
+              background: 'rgba(255,255,255,0.15)',
+              padding: '2px 5px',
+              borderRadius: 'var(--radius-xs)',
+            }}>
+              ^↵
+            </span>
           )}
         </motion.button>
       </div>

@@ -19,7 +19,77 @@ const LANGUAGES = [
   { id: 'java', name: 'Java 17', defaultCode: 'public class Main {\n    public static void main(String[] args) {\n        System.out.println("🔮 Java Glassmorphism Active");\n    }\n}' },
   { id: 'javascript', name: 'JavaScript (Node)', defaultCode: 'console.log("🔮 JavaScript Glassmorphism Active");\nconsole.log("Node.js Runtime: " + process.version);' },
   { id: 'html', name: 'HTML5', defaultCode: '<!DOCTYPE html>\n<html>\n<head>\n<style>\n  body { background: #08090a; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }\n  .box { padding: 40px; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(20px); border-radius: 20px; box-shadow: 0 0 40px rgba(94, 106, 210, 0.4); }\n</style>\n</head>\n<body>\n  <div class="box">\n    <h1>🔮 HTML Preview</h1>\n    <p>Live from Pro Compiler v2.5</p>\n  </div>\n</body>\n</html>' },
-  { id: 'css', name: 'Pure CSS', defaultCode: '/* Test your styles here */\nbody {\n  background: linear-gradient(135deg, #0f1011, #1a1b1e);\n  height: 100vh;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n}\n\n.card {\n  width: 300px;\n  height: 200px;\n  background: rgba(255,255,255,0.05);\n  backdrop-filter: blur(10px);\n  border-radius: 16px;\n  border: 1px solid rgba(255,255,255,0.1);\n}' },
+  { id: 'css', name: 'Pure CSS', defaultCode: `body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f7f7f4;
+  font-family: system-ui, sans-serif;
+}
+
+.container {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 40px;
+}
+
+.card {
+  background: #ffffff;
+  border: 1px solid #e6e5e0;
+  border-radius: 12px;
+  padding: 28px 32px;
+  max-width: 300px;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 400;
+  color: #26251e;
+  margin: 0 0 12px;
+  letter-spacing: -0.3px;
+}
+
+.subtitle {
+  font-size: 18px;
+  font-weight: 400;
+  color: #26251e;
+  margin: 0 0 12px;
+}
+
+.text {
+  font-size: 14px;
+  color: #5a5852;
+  line-height: 1.6;
+  margin: 0 0 20px;
+}
+
+code {
+  font-family: monospace;
+  font-size: 13px;
+  background: #f7f7f4;
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #f54e00;
+}
+
+.btn {
+  background: #f54e00;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: #d04200;
+}` },
 ];
 
 function App() {
@@ -48,7 +118,7 @@ function App() {
       // Ctrl+Enter or Ctrl+S to Run
       if ((e.ctrlKey || e.metaKey) && (e.key === 'Enter' || e.key === 's')) {
         e.preventDefault();
-        const runBtn = document.querySelector('.btn-premium');
+        const runBtn = document.querySelector('.btn-primary');
         if (runBtn) runBtn.click();
       }
       
@@ -114,10 +184,6 @@ function App() {
 
   return (
     <div className="app-container">
-      <div className="space-bg">
-        <div className="orb" style={{ width: '600px', height: '600px', background: 'rgba(94, 106, 210, 0.1)', top: '-200px', left: '-200px' }} />
-        <div className="orb" style={{ width: '400px', height: '400px', background: 'rgba(113, 112, 255, 0.05)', bottom: '0', right: '0' }} />
-      </div>
 
       <Header 
         languages={LANGUAGES}
@@ -129,7 +195,7 @@ function App() {
         onOpenAI={() => setIsAIChatOpen(true)}
       />
 
-      <main className="main-content" style={{ paddingRight: 0, position: 'relative', zIndex: 10 }}>
+      <main className="main-content">
         <EditorPanel 
           key={resetKey}
           language={language}
@@ -143,7 +209,7 @@ function App() {
           onTogglePreview={() => setShowPreview(!showPreview)}
         />
 
-        <div style={{ width: showPreview ? '50%' : '420px', height: '100%', display: 'flex', flexDirection: 'column', gap: '24px' }}>
+        <div style={{ width: showPreview ? '50%' : '420px', height: '100%', display: 'flex', flexDirection: 'column', gap: '12px' }}>
           <AnimatePresence mode="wait">
             {!showPreview ? (
               <ConsolePanel 
